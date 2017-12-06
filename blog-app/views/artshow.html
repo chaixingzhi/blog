@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+{% block head %}
+{{ super() }}
+	<title>{{ artical.title }}</title>
+	<style>
+		.float1{
+			position: fixed;
+			float: left;
+			margin: 0;
+			padding: 0;
+		}
+		.float2{
+			position: fixed;
+			float: left;
+			margin: 0;
+			padding: 0;
+			left: 80px;
+		}
+		#div1{
+			width: 62%;
+			margin-left: 490px;
+			padding: 10px;
+			border: 1px solid;
+			overflow: auto;
+			background-color: white;
+			opacity: 0.9;
+			
+		}
+		#div2{
+			width: 600px;
+			height: 100px;
+			text-align: center;
+			line-height: 100px;
+			margin-left: 490px;
+			color: gold;
+			font-size: 30px;
+		}
+		#comments{
+			position: fixed;
+			left: 15px;
+			top: 673px;
+			float: left;
+			width: 430px;
+			height: 400px;
+			display: none;
+			margin-top: -545px;
+			/*overflow: scroll;*/
+		}
+		#commentshow{
+			width: 62%;
+			margin-left: 490px;
+			border:1px solid;
+			text-align: center;
+			background-color: gold;
+			margin-bottom: 30px;
+			margin-top: 20px;
+		}
+		#name{
+			background-color: skyblue;
+			border:1px solid;
+			height: 20px;
+			position: relative;
+			top: -20px;
+			left: 0px;
+		}
+	</style>
+	<script src="/ckeditor/ckeditor.js" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
+{% block body %}
+    <button id="btn1" class="float2">评论</button>
+    <button id="btn2" class="float1">返回主页</button>
+	<div id="div2">{{ data.title | safe}}</div>
+<div id="div1">
+	{{ data.content | safe}}
+</div>
+{% for com in comments %}
+	{% for sun in com %}
+				
+	{% endfor %}	
+{% endfor %}
+<!-- {% for com in comments %}
+	<div id="commentshow">
+		<div id="name">用户名：{{ com.artical }}</div>
+		{{ com.content | safe}}
+	</div>
+{% endfor %} -->
+<div id="comments">
+	<form id="form" method="post" action="/comment" style="padding: 20px;">
+	  <div class="form-group">
+	    <label for="exampleInputEmail1">评论内容</label>
+	    <textarea id="editor" name="content"></textarea>
+	  </div>
+	  <button type="submit" class="btn btn-default" name="artical" value='{{ data._id }}'>保存</button>
+    </form>
+</div>
+<script>
+	CKEDITOR.replace("editor",{
+		width:430,
+		height:300,
+		filebrowserImageUploadUrl:"/upload",
+	});
+	$('#btn1').click(function(){
+		const comment = document.getElementById('comments');
+		if(comment.style.display === 'block'){
+			$('#comments').css("display","none");
+		}else{
+			$('#comments').css("display","block");
+		}
+	});	
+	$('#btn2').click(function(){
+		window.location.href = "/";
+	});
+</script>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+	<title>所发表的文章</title>
+	<style>
+		.navigation {
+			margin-right: 20px;
+			border: 1px solid ;
+			height: 400px;
+			text-align: center;
+			background-color: white;
+			opacity: 0.6;
+		}
+		.content{
+			padding: 5px;
+			float: right;
+			margin-right: 400px;
+			/*margin-bottom: 30px;*/
+			/*background-color: #aaa;*/
+			box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+			/*background-color: green;*/
+			background-color: white;
+			opacity: 0.6;
+			
+		}
+		.img{
+			display: block;
+			border: 1px solid;
+			width: 85%;
+			height: 50%;
+			margin-top: 10px;
+			margin: 0 auto;
+		}
+		#div2{
+			width: 500px;
+			height: 80px;
+			overflow: hidden;
+		}
+		span{
+			font:bold 16px 楷体;
+			color: blue;
+		}
+		#spand{
+			margin: 0 auto;
+			margin-top: 20px;
+			font-size: 18px;
+			border-top-style: 1px 
+		}
+	</style>
+{% endblock %}
+	
+{% block body %}
+	<div class="col-sm-1 col-md-2 navigation ">
+		<img class="img" src="{{ imgPath }}">
+		<div id="spand"><span>{{ username }}</span></div>
+	</div>
+{% for artical in data %}
+	<div class="col-sm-3 col-md-4 content" id="div1">
+		<span>title:<a href='{{ "/artshow?id=" +  artical._id }}'>{{ artical.title | safe }}</a></span>
+		<div id="div2" >{{ artical.content | safe }}</div>
+		<a href='{{ "/artshow?id=" +  artical._id }}'>阅读原文</a>
+	</div>
+	
+{% endfor %}
+
+
+{% endblock %}

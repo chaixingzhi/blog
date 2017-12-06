@@ -1,0 +1,221 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div style="min-width: 300px;padding: 20px; width: 35%; border: 1px solid #ddd; border-radius: 8px; float: right; margin-right: 5%;">
+<h1> 欢迎注册 
+<span style="float: right; font-size: 15px;">已有账号，<a href="/login">请登陆</a>
+</h1>
+<form >
+  <div class="form-group">
+    <label for="InputUsername">用户名</label>
+    <input type="text" name="user" class="form-control" id="InputUsername" placeholder="Username">
+  </div>
+  <p style="color: red;display: none" id="errMessage1">该昵称已经存在</p>
+  <div class="form-group">
+    <label for="InputPassword">密码</label>
+    <input type="password" name="password" class="form-control" id="InputPassword" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="InputPasswordAg">再次确认</label>
+    <input type="password" name="user" class="form-control" id="InputPasswordAg" placeholder="passwordagain">
+  </div>
+  <p style="color: red;display: none" id="errMessage2">两次密码不一致</p>
+  <div class="form-group">
+    <label for="InputEmail">邮箱</label>
+    <input type="text" name="user" class="form-control" id="InputEmail" placeholder="email">
+  </div>
+  <p style="color: red;display: none" id="errMessage3">邮箱格式不正确</p>
+  <div class="form-group">
+    <label for="InputPhone">手机号</label>
+    <input type="text" name="user" class="form-control" id="InputPhone" placeholder="phonebumber">
+  </div>
+  <p style="color: red;display: none" id="errMessage4">请输入正确手机号</p>
+ 
+  <p id="errMessage" style="color: red;">{{ errMessage }}</p>
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="captcha">验证码</label>
+    <div class="input-group" >
+        <input type="text" class="form-control" id="captcha" placeholder="captcha" name="captcha">
+        <div class="input-group-addon" style="padding: 0;margin: 0;">
+          <button style="padding: 0px;margin: 0;" type="button" id="btn2"><img alt="验证码" style="width: 130px;height: 100%;margin-top:-1px" id="captchaImg" src='{{ "data:image/jpeg;base64,"+ data }}'></button>
+        </div>
+    </div>
+</div>
+  <p style="color: red;display: none" id="errMessage6">验证码错误</p>
+  <p style="color: red;display: none" id="errMessage5">提交失败请确认数据的正确性</p>
+  <button type="button" class="btn btn-lg btn-primary btn-block" id="btn1">
+   <i class="glyphicon glyphicon-ok"></i>
+  提 交</button>
+</form>
+</div>
+<script>
+    const show = function(id){
+      $(id).css('display','block');
+    }
+    const hidden = function(id){
+      $(id).css('display','none');
+    }
+
+    $(function(){
+      var userFlog = false;
+      var passwordFlog = false;
+      var emailFlog = false;
+      var phoneFlog = false;
+      var captchaFlog = false;
+      var captcha = '{{ text }}';
+
+      $('#InputUsername').blur(function(){
+        const userdata = $('#InputUsername').val();
+        const postUserData ={
+          username:userdata,
+        };
+        console.log("postData: ",postUserData);
+        $.ajax({
+            url:"/register",
+            type:"POST",
+            contentType:"application/json",
+            data:JSON.stringify(postUserData),
+            success:function(data){
+                if(data === "error"){
+                  console.log("asdfafaf");
+                  show("#errMessage1");
+                }else{
+                  hidden("#errMessage1");
+                  userFlog = true;
+                  console.log("data is :",data);
+                }
+            },
+            error:function(data){
+                alert("onblur false");
+            }
+        });
+      });
+
+      $('#InputPasswordAg').blur(function(){
+        const passwordVal = $('#InputPassword').val();
+        const passwordAgVal = $('#InputPasswordAg').val();
+        if(passwordVal !== passwordAgVal){
+          show("#errMessage2");
+        }else{
+          hidden("#errMessage2");
+          passwordFlog=true;
+
+        }
+
+      });
+     
+      $('#InputEmail').blur(function(){
+        const emailVal = $('#InputEmail').val();
+        const reg = /^\w+@[0-9a-z-]+\.[a-z]+$/i;
+        if(!emailVal){
+                                                                                  
+        }else if(!reg.test(emailVal)){
+          show("#errMessage3");
+        }else{
+          hidden("#errMessage3");
+          emailFlog = true;
+        }
+      });
+
+      $('#InputPhone').blur(function(){
+        const phoneVal = $('#InputPhone').val();
+        let reg = /^1[3,5,7,8,9][0-9]{9}$/;
+        if(!phoneVal){
+
+        }else if(!reg.test(phoneVal)){
+          show('#errMessage4');
+        }else{
+          hidden("#errMessage4");
+          phoneFlog = true;
+        }
+      });
+
+      $("#btn2").click(function(){
+        const data5 = {
+          content:"captcha",
+        };
+        $.ajax({
+          url:'/register',
+          type:'POST',
+          contentType:"application/json",
+          data:JSON.stringify(data5),
+          success:function(data){
+            console.log("data is : ",data);
+            // const data1 = JSON.parse(data);
+            // console.log("data1: ",data1);
+            const base = data.buffer.toString("base64");
+            $('#captchaImg').attr("src","data:image/jpeg;base64,"+base); 
+            captcha = data.text;
+
+          },
+          error:function(data){
+            console.log("captcha err is: ",data1);
+          }
+        }); 
+        
+      }); 
+      $("#captcha").blur(function(){
+              let captVal = $("#captcha").val();
+              if(!captVal){
+
+              }else if(captVal !== captcha){
+                show('#errMessage6');
+              }else{
+                hidden("#errMessage6");
+                captchaFlog = true;
+              }
+      });
+      $("#btn1").click(function(){
+        var arr = [userFlog,passwordFlog,emailFlog,phoneFlog];
+
+        if(phoneFlog && emailFlog && passwordFlog && userFlog){
+          console.log("succeed !!!!!");
+          const username = $('#InputUsername').val();
+          const password = $('#InputPassword').val();
+          const email = $('#InputEmail').val();
+          const phone = $('#InputPhone').val();
+
+          const postData = {
+            "username":username,
+            "password":password,
+            "email":email,
+            "phone":phone
+          };
+          $.ajax({
+              url:"/register",
+              type:"POST",
+              contentType:"application/json",
+              data:JSON.stringify(postData),
+              success:function(data){
+                console.log("data:",data);
+                  if(data === "true"){
+                    console.log("succeed");
+                    window.location.href = "/login";
+                  }else{
+                    console.log(" cb data is undefind ");
+                  }
+              },
+              error:function(data){
+                  alert("error false");
+              }
+          });
+        }else{
+          for(let i in arr){
+            console.log("i",i);
+            console.log("else: ",i,arr[i]);
+            if(!arr[i]){
+              var a = parseInt(i)+1;
+              console.log("a",a);
+              show('#errMessage'+ a);
+            }else{
+              hidden('#errMessage'+ a);
+              continue;
+            }
+          }
+        }  
+      });
+    });
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block header %}
+	{{ super() }}
+	<script src="https://cdn.bootcss.com/react/16.0.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.bootcss.com/react-dom/16.0.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.bootcss.com/prop-types/15.6.0/prop-types.min.js"></script>
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+{% endblock %}
+{% block body %}
+	<div id="login" style="min-width: 300px; padding: 20px; width: 35%; border: 1px solid #ddd; border-radius: 8px; float: right; margin-right: 5%;" ></div>
+	<h1> 欢迎登录 
+		<span style="float: right; font-size: 15px;">没用账号，<a href="/register">请注册</a>
+	</h1>
+	<script type="text/babel">
+	class Login extends React.Component {
+		render(){
+			return (
+				<form method="post" action="/login">
+				  <div class="form-group">
+				    <label for="exampleInputEmail1">用户名</label>
+				    <input type="text" name="user" class="form-control" id="exampleInputEmail1" placeholder="Username">
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">密码</label>
+				    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+				  </div>
+				  <button type="submit" class="btn btn-lg btn-primary btn-block">
+				   <i class="glyphicon glyphicon-ok"></i>
+				  提 交</button>
+				</form>
+			);
+		}
+	}
+	ReactDOM.render(<Login />,document.getElementById('login'));
+	</script>
+{% endblock %}

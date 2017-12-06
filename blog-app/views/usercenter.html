@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block name %}
+	 <div class="navbar-header" style="font-size: 25px; margin-left: 30px; margin-top: 10px;">
+      	个人中心
+     </div>
+{% endblock %}
+{% block body %}
+<style>
+	.black{
+		background-color: white;
+		border:1px solid black;
+	}
+	.width{
+		height: 60px;
+	}
+	.height{
+		width: 60px;
+	}
+/*	table{
+		opacity: 0.6;
+	}*/
+</style>
+
+
+<table cellspacing="1" style="text-align: center;background-color: black;width: 400px;height: 400px;border:1px solid black;margin: 0 auto;">
+			<caption>学员登记表</caption>
+			<p>
+			<tr class="black width" >
+				<td rowspan="2" colspan="3" class="black height"">
+					<div >
+						<p ><img src="{{ imgPath }}" alt="头像" class="img-circle" style="width: 80px;height: 80px;"></p>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">修改头像</button>
+					</div>
+					{% include "avatarModal.html" %}
+				</td>
+				<td class="black">姓名</td>
+				<td class="black">{{ username }}</td>
+			</tr>
+			<tr class="black">
+				<td class="black">性别</td>
+				<td class="black">男</td>
+			</tr>
+			<tr class="black">
+				<td class="black"> 住址</td>
+				<td colspan="4" class="black">河南许昌</td>				
+			</tr>
+			<tr class="black">
+				<td class="black">学校</td>
+				<td colspan="2" class="black">许昌学院</td>
+				<td class="black">专业</td>
+				<td class="black"> 计算机</td>
+			</tr>
+			<tr class="black">
+				<td class="black">年级</td>
+				<td colspan="2" class="black">大四</td>
+				<td class="black">英文</td>
+				<td class="black">四级</td>
+			</tr>
+			</p>
+		</table>
+{% endblock %}
